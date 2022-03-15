@@ -40,7 +40,7 @@ class Search extends React.Component {
                     keyExtractor={(item) => item.id.toString()}
                    renderItem={({ item }) => <FilmItem film={item} />} />
                    
-                    </View>
+                </View>
             </View>
         )
     }
