@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import "react-json-pretty/themes/adventure_time.css";
-/* import JSONPretty from 'react-json-pretty' */
+import JSONPretty from "react-json-pretty";
 import dayjs from "dayjs";
 
 class FilmItem extends React.Component {
@@ -10,7 +10,9 @@ class FilmItem extends React.Component {
     console.log("test:" + this.props.film.title);
     return (
       <View>
-        <View>{/* <JSONPretty data={film}></JSONPretty> */}</View>
+        <View>
+          <JSONPretty data={film}></JSONPretty>
+        </View>
         <View style={styles.film_main_container}>
           <Image style={styles.image} source={film.poster_path} />
           <View style={styles.film_description}>
