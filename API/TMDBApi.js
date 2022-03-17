@@ -4,7 +4,7 @@ import { API_TOKEN } from "@env";
 
 const getFilmsFromApiWithSearchedText = async (text) => {
   const url =
-    'https://api.themoviedb.org/3/search/movie?api_key=' +
+    "https://api.themoviedb.org/3/search/movie?api_key=" +
     API_TOKEN +
     "&language=fr&query=" +
     text;
@@ -17,4 +17,13 @@ const getFilmsFromApiWithSearchedText = async (text) => {
   return response.data;
 };
 
+const getImageFromApi = (name) => {
+  if (name === null || name === undefined)
+    return require("../Assets/filmVide.jpg");
+  // 'https://image.tmdb.org/t/p/original' + name
+  // 'https://image.tmdb.org/t/p/w300' + name
+  return { uri: "https://image.tmdb.org/t/p/w300" + name };
+};
+
 export default getFilmsFromApiWithSearchedText;
+export { getFilmsFromApiWithSearchedText, getImageFromApi };

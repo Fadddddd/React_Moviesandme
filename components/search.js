@@ -6,7 +6,7 @@ import getFilmsFromApiWithSearchedText from "../API/TMDBApi";
 
 class Search extends React.Component {
   render() {
-    console.log('RENDER');
+    console.log("RENDER");
     return (
       <View style={styles.main_container}>
         <TextInput
