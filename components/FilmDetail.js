@@ -7,18 +7,14 @@ class FilmDetail extends React.Component {
       <View style={styles.main_container}>
         <Text>Détail du film</Text>
       </View>
-      );
-      
+    );
   }
 }
 
-
 const styles = StyleSheet.create({
-        main_container: {
-            flex: 1,
-        },
-    });
-
-
+  main_container: {
+    flex: 1,
+  },
+});
 
 export default FilmDetail;

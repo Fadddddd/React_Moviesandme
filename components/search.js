@@ -116,7 +116,7 @@ class Search extends React.Component {
   }
   displayDetailForFilm = (idFilm) => {
     console.log("film.id=" + idFilm);
-    alert("film.id=" + idFilm);
+    this.props.navigation.navigate("FilmDetail", { idFilm: idFilm });
   };
 }
 
