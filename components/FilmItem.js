@@ -4,10 +4,11 @@ import "react-json-pretty/themes/adventure_time.css";
 import JSONPretty from "react-json-pretty";
 import dayjs from "dayjs";
 import { getImageFromApi } from "../API/TMDBApi";
+import { Pressable } from "react-native";
 
 class FilmItem extends React.Component {
   render() {
-    const film = this.props.film;
+    const { film, displayDetailForFilm } = this.props;
     console.log("test:" + this.props.film.title);
     return (
       <View>
@@ -21,7 +22,9 @@ class FilmItem extends React.Component {
           />
           <View style={styles.film_description}>
             <View style={styles.titreVote}>
-              <Text style={styles.titreFilm}>{film.title}</Text>
+              <Pressable onPress={() => displayDetailForFilm(film.id)}>
+                <Text style={styles.titreFilm}>{film.title}</Text>
+              </Pressable>
               <Text>{film.vote_average}</Text>
             </View>
             <Text style={styles.OverviewFilm}>{film.overview}</Text>

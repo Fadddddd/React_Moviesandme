@@ -1,37 +1,86 @@
 import React from "react";
-import { FlatList, View, TextInput, Button, StyleSheet } from "react-native";
+import {
+  FlatList,
+  View,
+  TextInput,
+  Button,
+  StyleSheet,
+  SafeAreaView,
+} from "react-native";
 // import films from '../Helpers/filmsData'
 import FilmItem from "../Components/FilmItem";
 import getFilmsFromApiWithSearchedText from "../API/TMDBApi";
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator } from "react-native";
 
 class Search extends React.Component {
-  render() {
-    console.log('RENDER')
-    return (
-      <View style={styles.main_container}>
-        <TextInput
-          placeholder="Titre du film"
-          style={{ styles }}
-          onChangeText={(text) => this._searchTextInputChanged(text)}
-        />{' '}
-        <Button title="Rechercher" onPress={() => this._loadFilms()} />
-        <FlatList
-          data={this.state.films}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <FilmItem film={item} />}
-        />
-        {this._displayLoading()}
-      </View>
-    )
-  }
   constructor(props) {
     super(props);
     this.searchedText = "";
     this.state = {
       films: [],
-      isLoading: false, // Par défaut à false car il n'y a pas de chargement tant qu'on ne lance pas de recherche
+      height: 0,
+      //isLoading: false,   Par défaut à false car il n'y a pas de chargement tant qu'on ne lance pas de recherche
     };
+  }
+
+  render() {
+    console.log("RENDER");
+    return (
+      <SafeAreaView style={{ marginTop: 20, flex: 1 }}>
+        <View style={styles.main_container}>
+          <TextInput
+            style={styles.textinput}
+            placeholder="Titre du film"
+            onChangeText={(text) => this._searchTextInputChanged(text)}
+            onSubmitEditing={() => this._searchFilms()}
+          />
+          <Button title="Rechercher" onPress={() => this._searchFilms()} />
+          <FlatList
+            onLayout={(e) => {
+              this.setState({ height: e.nativeEvent.layout.height });
+              console.log(e.nativeEvent.layout.height);
+            }}
+            style={{
+              flexGrow: 1,
+              height: this.state.height,
+            }}
+            onEndReachedThreshold={0.5}
+            onEndReached={() => {
+              if (this.page < this.totalPages) {
+                // On vérifie qu'on n'a pas atteint la fin de la pagination (totalPages) avant de charger plus d'éléments
+                this._loadFilms();
+              }
+            }}
+            data={this.state.films}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <FilmItem
+                film={item}
+                displayDetailForFilm={this.displayDetailForFilm}
+              ></FilmItem>
+            )}
+          />
+          {this._displayLoading()}
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  _searchFilms() {
+    this.page = 0; // Compteur pour connaître la page courante
+    this.totalPages = 0; // Nombre de pages totales pour savoir si on a atteint la fin des retours de l'API;
+    this.setState({
+      films: [],
+    });
+    console.log(
+      "Page: " +
+        this.page +
+        "/ TotalPages: " +
+        this.totalPages +
+        " / Nombre de films : " +
+        this.state.films.length
+    );
+    this._loadFilms();
   }
 
   _searchTextInputChanged(text) {
@@ -41,25 +90,35 @@ class Search extends React.Component {
   // Bien noter les deux setState
   //   isLoading: True puis appel API puis lorsque l'API a répondu isLoading: False
   _loadFilms() {
-     if (this.state.isLoading) return
-    if (this.searchedText.length > 0) {
-      this.setState({ isLoading: true })
-    getFilmsFromApiWithSearchedText(this.searchedText).then((data) => {
-      this.setState({ films: data.results, isLoading:false });
-    });
+    if (this.searchedText.length == 0 || this.state.isLoading) return;
+    this.setState({ isLoading: true });
+    getFilmsFromApiWithSearchedText(this.searchedText, this.page + 1).then(
+      (data) => {
+        this.page = data.page;
+        this.totalPages = data.total_pages;
+        this.setState({
+          films: [...this.state.films, ...data.results],
+          isLoading: false,
+        });
+      }
+    );
   }
+
+  _displayLoading() {
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.loading_container}>
+          <ActivityIndicator size="large" />
+          {/* Le component ActivityIndicator possède une propriété size pour définir la taille du visuel de chargement : small ou large. Par défaut size vaut small, on met donc large pour que le chargement soit bien visible */}
+        </View>
+      );
+    }
   }
-  
-   _displayLoading() {
-        if (this.state.isLoading) {
-          return (
-            <View style={styles.loading_container}>
-              <ActivityIndicator size='large' />
-            {/* Le component ActivityIndicator possède une propriété size pour définir la taille du visuel de chargement : small ou large. Par défaut size vaut small, on met donc large pour que le chargement soit bien visible */}
-          </View>
-        )
-     }
-  }
+  displayDetailForFilm = (idFilm) => {
+    console.log("film.id=" + idFilm);
+    alert("film.id=" + idFilm);
+  };
+}
 
 const styles = StyleSheet.create({
   main_container: {
