@@ -19,7 +19,7 @@ class FilmDetail extends React.Component {
       isLoading: true, // A l'ouverture de la vue, on affiche le chargement, le temps de récupérer le détail du film
     };
   }
-
+    
   componentDidMount() {
     getFilmDetailFromApi(this.props.navigation.getParam("idFilm")).then(
       (data) => {
@@ -86,7 +86,6 @@ class FilmDetail extends React.Component {
       );
     }
   }
-
   render() {
     return (
       <View style={styles.main_container}>
@@ -94,7 +93,8 @@ class FilmDetail extends React.Component {
         {this._displayFilm()}
       </View>
     );
-  }
+    }
+
 }
 
 const styles = StyleSheet.create({
