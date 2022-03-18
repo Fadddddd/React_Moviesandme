@@ -1,13 +1,19 @@
 /* import { StatusBar } from 'expo-status-bar'; */
-import { StyleSheet, Text, View } from "react-native";
+/* import { StyleSheet, Text, View } from "react-native"; */
 import React from "react";
-import Navigation from "./Components/Navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import FilmDetail from "./components/FilmDetail";
+import Navigation from "./Navigation/Navigation";
+import { Provider } from "react-redux";
+import Store from "./Store/configureStore";
+/* import { createStackNavigator } from "react-navigation-stack"; */
+/* import FilmDetail from "./components/FilmDetail"; */
 
 export default class App extends React.Component {
   render() {
-    return <Navigation />;
+    return (
+      <Provider store={Store}>
+        <Navigation />
+      </Provider>
+    )
   }
 }
 const SearchStackNavigator = createStackNavigator({

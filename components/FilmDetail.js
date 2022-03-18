@@ -10,6 +10,7 @@ import {
 import { getFilmDetailFromApi, getImageFromApi } from "../API/TMDBApi";
 import dayjs from "dayjs";
 import numeral from "numeral";
+import { connect } from "react-redux";
 
 class FilmDetail extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class FilmDetail extends React.Component {
       isLoading: true, // A l'ouverture de la vue, on affiche le chargement, le temps de récupérer le détail du film
     };
   }
-    
+
   componentDidMount() {
     getFilmDetailFromApi(this.props.navigation.getParam("idFilm")).then(
       (data) => {
@@ -87,14 +88,14 @@ class FilmDetail extends React.Component {
     }
   }
   render() {
+    console.log(this.props); /* "favoritesFilm": Array [] */
     return (
       <View style={styles.main_container}>
         {this._displayLoading()}
         {this._displayFilm()}
       </View>
     );
-    }
-
+  }
 }
 
 const styles = StyleSheet.create({
@@ -142,4 +143,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FilmDetail;
+const mapStateToProps = (state) => {
+    return {
+        favoritesFilm: state.favoritesFilm,
+    }
+}
+export default connect(mapStateToProps)(FilmDetail)
