@@ -8,7 +8,8 @@ const getFilmsFromApiWithSearchedText = async (text, page) => {
     API_TOKEN +
     "&language=fr&query=" +
     text +
-    "&page=" + page ;
+    "&page=" +
+    page;
 
   const response = await axios.get(url);
   console.log("--getFilmsFromApiWithSearchedText--");
@@ -27,12 +28,22 @@ const getImageFromApi = (name) => {
 };
 
 const sleep = (milliseconds) => {
-  return new Promise(resolve => setTimeout(resolve, milliseconds))
-}
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+};
 async function slowNetwork() {
-  await sleep(5000)
+  await sleep(5000);
 }
 
+const getFilmDetailFromApi = async (id) => {
+  const url =
+    "https://api.themoviedb.org/3/movie/" +
+    id +
+    "?api_key=" +
+    API_TOKEN +
+    "&language=fr";
+  const response = await axios.get(url);
+  return response.data;
+};
 
 export default getFilmsFromApiWithSearchedText;
 export { getFilmsFromApiWithSearchedText, getImageFromApi };
